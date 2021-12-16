@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.spring.sharding.dao.EnumsMapper" >
+
+  <resultMap id="BaseResultMap" type="com.example.spring.sharding.dataobject.EnumsDO" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="var1" property="var1" jdbcType="VARCHAR" />
+    <result column="var2" property="var2" jdbcType="VARCHAR" />
+    <result column="var3" property="var3" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, type, name, var1, var2, var3, del_flag, create_time, update_time
+  </sql>
+
+  <sql id="Table_Name" >
+    enums
+  </sql>
+
+  <sql id="Where_Clause_QO">
+    <trim prefix="where" prefixOverrides="and|or">
+      <if test="id != null">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="ids != null and ids.size > 0">
+        AND id IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+      <if test="type != null">
+        and `type` = #{type ,jdbcType=TINYINT}
+      </if>
+      <if test="name != null">
+        and `name` = #{name ,jdbcType=VARCHAR}
+      </if>
+      <if test="nameVague != null">
+        and `name` like #{nameVague ,jdbcType=VARCHAR}
+      </if>
+      <if test="var1 != null">
+        and `var1` = #{var1 ,jdbcType=VARCHAR}
+      </if>
+      <if test="var2 != null">
+        and `var2` = #{var2 ,jdbcType=VARCHAR}
+      </if>
+      <if test="var3 != null">
+        and `var3` = #{var3 ,jdbcType=VARCHAR}
+      </if>
+      <choose>
+        <when test="delFlag != null">
+          AND del_flag = #{delFlag,jdbcType=TINYINT}
+        </when>
+        <otherwise>
+          AND del_flag = 0
+        </otherwise>
+      </choose>
+    </trim>
+  </sql>
+
+  <sql id="Where_Clause_Page">
+    <trim prefix="where" prefixOverrides="and|or">
+      <if test="data.id != null">
+        and id = #{data.id,jdbcType=BIGINT}
+      </if>
+      <if test="data.ids != null and data.ids.size > 0">
+        AND id IN
+        <foreach item="id" collection="data.ids" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+      <if test="data.type != null">
+        and `type` = #{data.type,jdbcType=TINYINT}
+      </if>
+      <if test="data.name != null">
+        and `name` = #{data.name,jdbcType=VARCHAR}
+      </if>
+      <if test="data.var1 != null">
+        and `var1` = #{data.var1,jdbcType=VARCHAR}
+      </if>
+      <if test="data.var2 != null">
+        and `var2` = #{data.var2,jdbcType=VARCHAR}
+      </if>
+      <if test="data.var3 != null">
+        and `var3` = #{data.var3,jdbcType=VARCHAR}
+      </if>
+      <choose>
+        <when test="data.delFlag != null">
+          AND del_flag = #{data.delFlag,jdbcType=TINYINT}
+        </when>
+        <otherwise>
+          AND del_flag = 0
+        </otherwise>
+      </choose>
+    </trim>
+  </sql>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.example.spring.sharding.dataobject.EnumsDO">
+    insert into <include refid="Table_Name" />
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="type != null">
+        type,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="var1 != null">
+        `var1`,
+      </if>
+      <if test="var2 != null">
+        var2,
+      </if>
+      <if test="var3 != null">
+        var3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="var1 != null">
+        #{var1,jdbcType=VARCHAR},
+      </if>
+      <if test="var2 != null">
+        #{var2,jdbcType=VARCHAR},
+      </if>
+      <if test="var3 != null">
+        #{var3,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="com.example.spring.sharding.dataobject.EnumsDO">
+    update <include refid="Table_Name" />
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="type != null">
+        `type` = #{uid,jdbcType=TINYINT},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="var1 != null">
+        `var1` = #{var1,jdbcType=VARCHAR},
+      </if>
+      <if test="var2 != null">
+        `var2` = #{var2,jdbcType=VARCHAR},
+      </if>
+      <if test="var3 != null">
+        `var3` = #{var3,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        del_flag = #{delFlag,jdbcType=TINYINT},
+      </if>
+    </trim>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select <include refid="Base_Column_List" />
+    from <include refid="Table_Name" />
+    where id = #{id,jdbcType=BIGINT}
+    and del_flag = 0
+  </select>
+
+  <select id="selectOne" resultMap="BaseResultMap"
+          parameterType="com.example.spring.sharding.qo.EnumsQO">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM <include refid="Table_Name" />
+    <if test="_parameter != null">
+      <include refid="Where_Clause_QO"/>
+    </if>
+    limit 1
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap"
+          parameterType="com.example.spring.sharding.qo.EnumsQO">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM <include refid="Table_Name" />
+    <if test="_parameter != null">
+      <include refid="Where_Clause_QO"/>
+    </if>
+  </select>
+
+  <select id="select30" resultMap="BaseResultMap"
+          parameterType="com.example.spring.sharding.qo.EnumsQO">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM <include refid="Table_Name" />
+    <if test="_parameter != null">
+      <include refid="Where_Clause_QO"/>
+    </if>
+    limit 30
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    update <include refid="Table_Name" />
+    set del_flag = 1
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+</mapper>
